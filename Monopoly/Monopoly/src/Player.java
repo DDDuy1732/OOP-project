@@ -82,20 +82,27 @@ public class Player {
         this.ownedCard = ownedCard;
     }
     
-    public int rollDice() {
-        Dice dice1 = new Dice();
-        Dice dice2 = new Dice();
-        dice1.roll();
-        System.out.println("Dice 1: " + dice1.getValueDice());
-        dice2.roll();
-        System.out.println("Dice 2: " + dice2.getValueDice());
-        int totalValue = dice1.getValueDice() + dice2.getValueDice();
-        if (dice1.getValueDice() == dice2.getValueDice()) {
+    public int rollDice(GUIV2 gui) {
+        gui.diceRoll1.roll(gui.diceLabel1);
+        gui.diceRoll2.roll(gui.diceLabel2);
+
+        gui.diceLabel1.updateUI();
+        gui.diceLabel2.updateUI();
+        gui.dicePanel.updateUI();
+
+        gui.frame.repaint();
+
+        System.out.println("Dice 1: " + gui.diceRoll1.getDice());
+        System.out.println("Dice 2: " + gui.diceRoll2.getDice());
+        int totalValue = gui.diceRoll1.getDice() + gui.diceRoll2.getDice();
+        if (gui.diceRoll1.getDice() == gui.diceRoll2.getDice()) {
             System.out.println("Player " + name + " have one more chance to roll the dices.");
-            totalValue = dice1.getValueDice() + dice2.getValueDice() + rollDice();
+            totalValue = gui.diceRoll1.getDice() + gui.diceRoll2.getDice() + rollDice(gui);
         }
 
         return totalValue;
+    }
+
     }
 
     
