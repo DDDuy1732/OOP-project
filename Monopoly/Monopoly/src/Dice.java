@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-public class DiceRoll extends JComponent {
+public class Dice extends JComponent {
 
 private BufferedImage dice1;
 private BufferedImage dice2;
@@ -19,7 +19,7 @@ private BufferedImage dice5;
 private BufferedImage dice6;
 
 
-public DiceRoll()
+public Dice()
 {
     try {
         dice1 = (ImageIO.read(new File("src/ImageIcon/dice1.png")));
