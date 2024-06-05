@@ -12,9 +12,12 @@ public class Beach extends PropertySquare {
                 setPropertyValue(25000);
                 break;
             case 2:
-                setPropertyValue(100000);
+                setPropertyValue(75000);
                 break;
             case 3:
+                setPropertyValue(100000);
+                break;
+            case 4:
                 setPropertyValue(200000);
                 break;
             default:
