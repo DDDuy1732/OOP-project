@@ -1,106 +1,74 @@
-public class City extends PropertySquare {
-    private boolean isWorldCup;
+public class Event extends Square {
 
-    public City(String name, int position, int initialValue, int level, int upgradeCost) {
-        super(name, position, initialValue, level, upgradeCost);
-        setType(SquareType.CITY);
+
+    public Event(String name, int location, SquareType type) {
+        super(name, location, type);
     }
 
-    public boolean isWorldCup() {
-        return isWorldCup;
-    }
-
-    public void setWorldCup(boolean isWorldCup) {
-        this.isWorldCup = isWorldCup;
-    }
-
-    @Override
-    public void calculateUpgradeCost() {
-
-        switch (getLevel()) {
-            case 1:
-                setUpgradeCost(getUpgradeCost() + 50000);
-                break;
-            case 2:
-                setUpgradeCost(getUpgradeCost() + 200000);
-                break;
-            case 3:
-                setUpgradeCost(getUpgradeCost() + 300000);
-                break;
-            case 4:
-                setUpgradeCost(getUpgradeCost() + 500000);
-                break;
-            case 5:
-                setUpgradeCost(getUpgradeCost() + 1000000);
-                break;
-            default:
-                break;
+    public void setWorldCup(Board board, Player player, GUIV2 gui) {
+        int choice;
+    
+        while (true) {
+            try {
+                System.out.println("Please choose a city below to hold World Cup event: ");
+                printCity(player);
+                System.out.println("Your choice (input a number): ");
+                choice = gui.getUserInputNumber();
+                if (!board.getEventCity().isEmpty()) {
+                    // Remove World Cup event from the previous player's chosen city
+                    City previousEventCity = board.getEventCity().get(0);
+                    previousEventCity.setWorldCup(false);
+                    previousEventCity.calculateVisitCost(false);
+                    System.out.println("Player " + previousEventCity.getOwner().getName() +
+                            " removed World Cup from " + previousEventCity.getName());
+                    board.getEventCity().clear();
+                }
+    
+                if (isValidChoice(choice, player.getOwnedProperty().size())) {
+                    if (player.getOwnedProperty().get(choice - 1) instanceof City) {
+                        City chosenCity = (City) player.getOwnedProperty().get(choice - 1);
+                        chosenCity.setWorldCup(true);
+                        chosenCity.calculateVisitCost(true);
+    
+                        System.out.println("Player " + player.getName() + " successfully set World Cup at " +
+                                chosenCity.getName());
+                        System.out.println(chosenCity.getName() + " visit cost increased to: $" + chosenCity.getVisitCost());
+    
+                        board.getEventCity().add(chosenCity);
+                        chosenCity.setWorldCup(true);
+    
+                        break;
+                    } else {
+                        System.out.println("You can only set the World Cup event on a city!");
+                    }
+                } else {
+                    System.out.println("Please input a valid property number!!!");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Please input an integer!!!");
+            }
         }
-
     }
+    
 
-    @Override
-    public void calculatePropertyValue(Player player) {
-        
-    }
+    private boolean isValidChoice(int choice, int maxProperty) {
 
-    @Override
-    public void calculatePropertyValue() {
-
-        switch (getLevel()) {
-            case 1:
-                setPropertyValue(100000 * getLevel() + getInitialValue());
-                System.out.println("You upgrade " + getName() + " to level 1!");
-                break;
-            case 2:
-                setPropertyValue(200000 * getLevel() + getInitialValue());
-                System.out.println("You upgrade " + getName() + " to level 2!");
-                break;
-            case 3:
-                setPropertyValue(400000 * getLevel() + getInitialValue());
-                System.out.println("You upgrade " + getName() + " to level 3!");
-                break;
-            case 4:
-                setPropertyValue(800000 * getLevel() + getInitialValue());
-                System.out.println("You upgrade " + getName() + " to level 4!");
-                break;
-            case 5:
-                setPropertyValue(1600000 * getLevel() + getInitialValue());
-                System.out.println("You upgrade " + getName() + " to level 5!");
-                break;
-            default:
-                break;
+        if (choice >= 1 && choice <= maxProperty) {
+            return true;
+        } else {
+            System.out.println("Please input a valid number between 1 and " + maxProperty + "!!!");
+            return false;
         }
-
     }
 
-    @Override
-    public void calculateVisitCost(boolean isWorldCup) {
-        if (isWorldCup) {
-            setVisitCost(getVisitCost() * 10);
+    private void printCity(Player player) {
+        for (int i = 0; i < player.getOwnedProperty().size(); i++) {
+            if (player.getOwnedProperty().get(i).getType() == SquareType.CITY) {
+                System.out.println((i + 1) + ". " + player.getOwnedProperty().get(i).getName() + "|Current visit cost: "
+                        + player.getOwnedProperty().get(i).getVisitCost());
+            }
+
         }
-        else{
-            setVisitCost(getPropertyValue() / 2);
-        }
-        
-    }
-
-    @Override
-    public int calculateSellValue() {
-
-        return (getPropertyValue() * 7) / 10;
-    }
-
-    @Override
-    public String toString() {
-
-        return "|Name: " + getName() + "|City buy cost: $" + getInitialValue() + "|Upgrade cost: $"
-                + getUpgradeCost() + "|";
-    }
-
-    @Override
-    public void calculateVisitCost() {
-        throw new UnsupportedOperationException("Unimplemented method 'calculateVisitCost'");
     }
 
 }
