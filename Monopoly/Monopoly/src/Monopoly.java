@@ -118,7 +118,7 @@ public class Monopoly extends JPanel {
         }
         
         int currentLocation = player.getLocation();
-        int step = player.rollDice();
+        int step = player.rollDice(gui);
         
         currentLocation += step;
 
