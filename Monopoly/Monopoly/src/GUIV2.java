@@ -2,14 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.io.PrintStream;
 import java.util.ArrayList;
 
 public class GUIV2 extends JPanel {
     JFrame frame = new JFrame();
     int step;
-    JButton rollBtn;
     @SuppressWarnings("unused")
     private String userInput;
     JLabel cashLabel;
@@ -19,14 +17,21 @@ public class GUIV2 extends JPanel {
     ArrayList<JLabel> cashLabels = new ArrayList<>();
     JLayeredPane boardPanel;
 
-    private Dice dice1;
-    private Dice dice2;
+    // private Dice dice1;
+    // private Dice dice2;
+    
+    JPanel dicePanel;
+    JButton rollBtn;
+    Dice diceRoll1;
+    Dice diceRoll2;
+    JLabel diceLabel1;
+    JLabel diceLabel2;
     int numPlayers = 0;
 
 
     GUIV2(Board board, Monopoly monopoly) {
 
-        ImageIcon MonopolyIcon = new ImageIcon("Monopoly\\src\\ImageIcon\\Monopoly_game_logo.svg.png");
+        ImageIcon MonopolyIcon = new ImageIcon("src/ImageIcon/Monopoly_game_logo.svg.png");
         frame.setLayout(null);
 
         JTextArea textArea = new JTextArea();
@@ -88,31 +93,49 @@ public class GUIV2 extends JPanel {
 
         JLabel logoLabel = new JLabel(MonopolyIcon);
         logoLabel.setBounds((centerPanel.getWidth() - MonopolyIcon.getIconWidth()) / 2,
-                100, MonopolyIcon.getIconWidth(),
+                100,
+                MonopolyIcon.getIconWidth(),
                 MonopolyIcon.getIconHeight());
         centerPanel.add(logoLabel);
         
-        // Create dice panel
-        dice1 = new Dice();
-        dice1.setBounds(100, 100, 100, 100); // adjust the bounds as needed
-        centerPanel.add(dice1);
+        
+        // Create the dice
+        diceRoll1 = new Dice();
+        diceRoll2 = new Dice();
+        diceLabel1 = new JLabel();
+        diceLabel2 = new JLabel();
+        diceLabel1.setOpaque(false);
+        diceLabel2.setOpaque(false);
 
-        dice2 = new Dice();
-        dice2.setBounds(200, 100, 100, 100); // adjust the bounds as needed
-        centerPanel.add(dice2);
+        // Set default dice images
+        ImageIcon defaultDice = new ImageIcon("src/ImageIcon/dice1.png");
+        diceLabel1.setIcon(defaultDice);
+        diceLabel2.setIcon(defaultDice);
 
+        dicePanel = new JPanel(new GridLayout(1,2));
+        dicePanel.setOpaque(false);
+        dicePanel.add(diceLabel1);
+        dicePanel.add(diceLabel2);
+
+        // Add the dicePanel to the center of the main panel
+        dicePanel.setBounds((centerPanel.getWidth() - 50 - defaultDice.getIconWidth() * 2) / 2,
+            350,
+            defaultDice.getIconWidth() * 2 + 50,
+            defaultDice.getIconHeight()); // adjust the bounds as needed
+        centerPanel.add(dicePanel);
+
+        // Add the rollDice button to the bottom of the main panel
         rollBtn = new JButton("Roll Dice");
         centerPanel.add(rollBtn);
         rollBtn.setBounds(270, 500, 100, 50);
         rollBtn.setFocusable(false);
         
+        // Add listeners to the menu items and buttons
         rollBtn.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 rollBtn.setEnabled(false);
-                dice1.rollDice();
-                dice2.rollDice();
                 System.out.println();
                 
                 
@@ -123,6 +146,7 @@ public class GUIV2 extends JPanel {
                 } else {
                     monopoly.printResult(board);
                 }
+
                 frame.repaint();
                 rollBtn.setEnabled(true);
             }
