@@ -9,5 +9,6 @@ public enum SquareType {
     CARD,
     PLANE,
     PROPERTY,
-    EVENT
+    EVENT,
+    COMPANY,
 }
