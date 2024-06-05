@@ -4,12 +4,12 @@ public class Jail extends Square{
         super("Lost Island", 11, SquareType.JAIL);
     }
 
-    public static void handlePlayerInJail( Board board, Player player, GUIV2 gui) {
+    public static void handlePlayerInJail(Board board, Player player, GUIV2 gui) {
         System.out.println(player.getName() + " is in Jail.");
         
 
         // Check if player has rolled doubles
-        boolean rolledDoubles = rollDiceForJail();
+        boolean rolledDoubles = rollDiceForJail(gui);
 
         if (rolledDoubles) {
             System.out.println("Congratulations! " + player.getName() + " rolled doubles and got out of Jail.");
@@ -29,15 +29,20 @@ public class Jail extends Square{
         }
     }
 
-    private static boolean rollDiceForJail() {
-        Dice dice = new Dice();
-        int diceRoll1 = dice.roll();
-        int diceRoll2 = dice.roll();
+    private static boolean rollDiceForJail(GUIV2 gui) {
+        gui.diceRoll1.roll(gui.diceLabel1);
+        gui.diceRoll2.roll(gui.diceLabel2);
 
-        System.out.println("Dice Roll 1: " + diceRoll1);
-        System.out.println("Dice Roll 2: " + diceRoll2);
+        gui.diceLabel1.updateUI();
+        gui.diceLabel2.updateUI();
+        gui.dicePanel.updateUI();
 
-        return diceRoll1 == diceRoll2;
+        gui.frame.repaint();
+
+        System.out.println("Dice 1: " + gui.diceRoll1.getDice());
+        System.out.println("Dice 2: " + gui.diceRoll2.getDice());
+
+        return gui.diceRoll1.getDice() == gui.diceRoll2.getDice();
     }
 
     private static void payJailFine(int amount, Board board, Player player, GUIV2 gui) {
