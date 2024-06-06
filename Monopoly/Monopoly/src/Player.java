@@ -115,6 +115,16 @@ public class Player {
         return beachCount;
     }
 
+    public int totalNumberOfCompanies() {
+        int companyCount = 0;
+        for (Square square : ownedProperty) {
+            if (square instanceof Company) {
+                companyCount++;
+            }
+        }
+        return companyCount;
+    }
+
     public int calculateTotalPropertyValue() {
         int totalPropertyValue = 0;
         for (int i = 0; i < ownedProperty.size(); i++) {
@@ -210,6 +220,8 @@ public class Player {
                             + propertySquare.getOwner().getName());
                 } else if (propertySquare.getType() == SquareType.BEACH) {
                     System.out.println("You cannot buy beach properties.");
+                } else if (propertySquare.getType() == SquareType.COMPANY) {
+                    System.out.println("You cannot buy company properties.");
                 }
             } else {
                 if (propertySquare.getType() == SquareType.CITY && propertySquare.getLevel() < 5) {
@@ -386,6 +398,25 @@ public class Player {
                     Beach beach = (Beach) ownedProperty.get(i);
                     beach.calculatePropertyValue(this);
                     beach.calculateVisitCost();
+                }
+            }
+            System.out.printf(
+                    "|Name: %s|Location: %d|Owner: %s|Property value: %d$|Visit cost: %d$|",
+                    property.getName(), property.getPosition(),
+                    property.getOwner().getName(), property.getPropertyValue(), property.getVisitCost());
+
+            System.out.println();
+        } else if (property.getType() == SquareType.COMPANY){
+            ownedProperty.add(property);
+            setCash(getCash() - property.getInitialValue());
+            property.setLevel(property.getLevel() + 1);
+            property.setOwned(true);
+            property.setOwner(this);
+            for (int i = 0; i < ownedProperty.size(); i++) {
+                if (ownedProperty.get(i) instanceof Company) {
+                    Company company = (Company) ownedProperty.get(i);
+                    company.calculatePropertyValue(this);
+                    company.calculateVisitCost();
                 }
             }
             System.out.printf(

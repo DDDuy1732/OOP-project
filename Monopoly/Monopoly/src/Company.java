@@ -25,7 +25,7 @@ public class Company extends PropertySquare {
     @Override
     public void calculateVisitCost() {
         int numCompaniesOwned = getOwner().totalNumberOfCompanies();
-        int roll = dice.roll(); // Roll the die using the Dice instance
+        int roll = dice.getDice(); // Roll the die using the Dice instance
         if (numCompaniesOwned == 1) {
             setVisitCost(getPropertyValue() * roll);
         } else if (numCompaniesOwned == 2) {
