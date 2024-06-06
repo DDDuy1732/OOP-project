@@ -117,7 +117,7 @@ public class Square extends JPanel{
         int textY = height / 2 + textHeight / 2 - 25;
         g2d.drawString(text, textX, textY);
 
-        if (this.getType() == SquareType.CITY || this.getType() == SquareType.BEACH) {
+        if (this.getType() == SquareType.CITY || this.getType() == SquareType.BEACH || this.getType() == SquareType.COMPANY) {
             PropertySquare propertySquare = (PropertySquare) this;
             if (propertySquare.isOwned()) {
                 String visitCost = "$" + propertySquare.getVisitCost();
