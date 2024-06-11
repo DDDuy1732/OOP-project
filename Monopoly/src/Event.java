@@ -25,23 +25,38 @@ public class Event extends Square {
                 }
 
                 if (isValidChoice(choice, player.getOwnedProperty().size())) {
-
-                    City chosenCity = (City) player.getOwnedProperty().get(choice - 1);
-                    chosenCity.setWorldCup(true);
-                    chosenCity.calculateVisitCost(true);
-
-                    System.out.println("Player " + player.getName() + " successfully set World Cup at " +
-                            chosenCity.getName());
-                    System.out
-                            .println(chosenCity.getName() + " visit cost increased to: $" + chosenCity.getVisitCost());
-
-                    board.getEventCity().add(chosenCity);
-                    chosenCity.setWorldCup(true);
-
-                    break;
+                    Square chosenSquare = player.getOwnedProperty().get(choice - 1);
+                    if (chosenSquare instanceof City) {
+                        City chosenCity = (City) chosenSquare;
+                        // Now you can safely work with chosenCity
+                        chosenCity.setWorldCup(true);
+                        chosenCity.calculateVisitCost(true);
+                
+                        System.out.println("Player " + player.getName() + " successfully set World Cup at " +
+                                chosenCity.getName());
+                        System.out.println(chosenCity.getName() + " visit cost increased to: $" + chosenCity.getVisitCost());
+                
+                        if (!board.getEventCity().isEmpty()) {
+                            // Remove World Cup event from the previous player's chosen city
+                            City previousEventCity = board.getEventCity().get(0);
+                            previousEventCity.setWorldCup(false);
+                            previousEventCity.calculateVisitCost(false);
+                            System.out.println("Player " + previousEventCity.getOwner().getName() +
+                                    " removed World Cup from " + previousEventCity.getName());
+                            board.getEventCity().clear();
+                        }
+                
+                        board.getEventCity().add(chosenCity);
+                
+                        break;
+                    } else {
+                        // Handle the case where the chosen property is not a city
+                        System.out.println("You must choose a city to hold the World Cup event!");
+                    }
                 } else {
                     System.out.println("Please input a valid property number!!!");
                 }
+                
             } catch (NumberFormatException e) {
                 System.out.println("Please input an integer!!!");
             }
